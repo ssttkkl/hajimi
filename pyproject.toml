@@ -7,6 +7,7 @@ dependencies = [
     "gemini-webapi>=1.0.0",
     "aiosqlite>=0.20.0",
     "click>=8.0.0",
+    "browser-cookie3>=0.20.1",
 ]
 
 [tool.uv]
