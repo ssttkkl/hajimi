@@ -118,9 +118,13 @@ async def call_tool(name: str, arguments: dict):
             await db.save(session_id, chat.metadata)
 
         contents = [
-            TextContent(type="text", text=f"Session ID: {session_id}"),
-            TextContent(type="text", text=output.text)
+            TextContent(type="text", text=f"Session ID: {session_id}")
         ]
+
+        if output.thoughts:
+            contents.append(TextContent(type="text", text=f"Thoughts:\n{output.thoughts}"))
+
+        contents.append(TextContent(type="text", text=output.text))
 
         if output.images:
             images_dir = data_dir / "images"
