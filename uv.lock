@@ -207,6 +207,7 @@ version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },
+    { name = "click" },
     { name = "gemini-webapi" },
     { name = "mcp" },
 ]
@@ -214,6 +215,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "aiosqlite", specifier = ">=0.20.0" },
+    { name = "click", specifier = ">=8.0.0" },
     { name = "gemini-webapi", specifier = ">=1.0.0" },
     { name = "mcp", specifier = ">=1.0.0" },
 ]

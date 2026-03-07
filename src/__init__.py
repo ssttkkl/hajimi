@@ -1,3 +1,2 @@
-from .server import main
+# Package initialization
 
-__all__ = ["main"]

@@ -1,16 +1,16 @@
-# Gemini Web MCP Server
+# Hajimi - Gemini Web CLI & MCP Server
 
-An MCP (Model Context Protocol) server for Google Gemini, built with Python + uv + gemini-webapi.
+A command-line tool and MCP (Model Context Protocol) server for Google Gemini, built with Python + uv + gemini-webapi.
 
-This project is built on [Gemini-API](https://github.com/HanaokaYuzu/Gemini-API), a reverse-engineered asynchronous Python wrapper for the Google Gemini web app (formerly Bard), enabling you to access Gemini's full capabilities locally via MCP protocol.
+This project is built on [Gemini-API](https://github.com/HanaokaYuzu/Gemini-API), a reverse-engineered asynchronous Python wrapper for the Google Gemini web app (formerly Bard).
 
 [中文文档](README-zh.md)
 
 ## Installation
 
 ```bash
-git clone https://github.com/ssttkkl/gemini-web-mcp.git
-cd gemini-web-mcp
+git clone https://github.com/ssttkkl/hajimi.git
+cd hajimi
 uv sync
 ```
 
@@ -18,13 +18,18 @@ uv sync
 
 **Set Gemini Cookies (Required):**
 
-Method 1: Environment Variables
+Method 1: Using CLI command
+```bash
+gemini-web auth setup
+```
+
+Method 2: Environment Variables
 ```bash
 export GEMINI_COOKIE_1PSID="YOUR_1PSID_VALUE"
 export GEMINI_COOKIE_1PSIDTS="YOUR_1PSIDTS_VALUE"
 ```
 
-Method 2: Config File `~/.config/gemini-web/cookies.json`
+Method 3: Config File `~/.config/gemini-web/cookies.json`
 ```json
 {
   "secure_1psid": "YOUR_1PSID_VALUE",
@@ -34,16 +39,79 @@ Method 2: Config File `~/.config/gemini-web/cookies.json`
 
 ## Usage
 
+### CLI Mode
+
+**Authentication:**
+```bash
+# Setup cookies
+gemini-web auth setup
+
+# Check auth status
+gemini-web auth show
+```
+
+**Generate Content:**
+```bash
+# Single-turn generation
+gemini-web generate "Hello, introduce yourself"
+
+# With file input
+gemini-web generate "Describe this image" --file image.jpg
+
+# Streaming output
+gemini-web generate "Tell me a story" --stream
+
+# Specify model
+gemini-web generate "Test" --model gemini-3.0-pro
+
+# Save output
+gemini-web generate "Summary" --output result.txt
+
+# Save images to specific directory
+gemini-web generate "Draw a cat" --image-output ./images
+```
+
+**Interactive Chat:**
+```bash
+# Start new chat
+gemini-web chat
+
+# Resume existing session
+gemini-web chat --session session-xxx
+
+# Use specific model
+gemini-web chat --model gemini-3.0-flash-thinking
+```
+
+**Session Management:**
+```bash
+# List all sessions
+gemini-web session list
+
+# View session history
+gemini-web session history session-xxx
+
+# Delete session
+gemini-web session delete session-xxx
+```
+
+### MCP Server Mode
+
+Start MCP server:
+```bash
+gemini-web mcp
+```
+
 Add to your `mcp.json`:
 
-**If using Method 1 (Environment Variables):**
+**If using Method 2 (Environment Variables):**
 
 ```json
 {
   "mcpServers": {
     "gemini-web": {
       "command": "uv",
-      "args": ["--directory", "/path/to/gemini-web-mcp", "run", "gemini-web-mcp"],
+      "args": ["--directory", "/path/to/hajimi", "run", "gemini-web", "mcp"],
       "env": {
         "GEMINI_COOKIE_1PSID": "YOUR_1PSID_VALUE",
         "GEMINI_COOKIE_1PSIDTS": "YOUR_1PSIDTS_VALUE"
@@ -53,14 +121,14 @@ Add to your `mcp.json`:
 }
 ```
 
-**If using Method 2 (Config File):**
+**If using Method 3 (Config File):**
 
 ```json
 {
   "mcpServers": {
     "gemini-web": {
       "command": "uv",
-      "args": ["--directory", "/path/to/gemini-web-mcp", "run", "gemini-web-mcp"]
+      "args": ["--directory", "/path/to/hajimi", "run", "gemini-web", "mcp"]
     }
   }
 }

@@ -7,7 +7,7 @@ from mcp.server import Server
 from mcp.types import Tool, TextContent, ImageContent
 from gemini_webapi import GeminiClient
 from gemini_webapi.constants import Model
-from .db import SessionDB
+from ..db import SessionDB
 
 # 数据目录
 if os.name == 'nt':

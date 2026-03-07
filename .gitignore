@@ -14,3 +14,4 @@ test_result.txt
 *.egg-info/
 dist/
 build/
+*.png

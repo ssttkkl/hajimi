@@ -1,11 +1,12 @@
 [project]
-name = "gemini-web-mcp"
+name = "hajimi"
 version = "1.0.0"
 requires-python = ">=3.11"
 dependencies = [
     "mcp>=1.0.0",
     "gemini-webapi>=1.0.0",
     "aiosqlite>=0.20.0",
+    "click>=8.0.0",
 ]
 
 [tool.uv]
@@ -15,4 +16,4 @@ package = true
 packages = ["src"]
 
 [project.scripts]
-gemini-web-mcp = "src.server:run"
+gemini-web = "src.cli.main:main"
