@@ -71,7 +71,21 @@ uv run gemini-web generate "画一只雪中独狼" --image-output ~/Library/Appl
 
 图片自动保存到 `~/Library/Application Support/gemini-web/images/` (macOS)。
 
-**📤 发送到 Channel**：生成图片后，使用 `message` 工具将图片发送到 channel，让用户能够直接看到生成的结果。
+**📤 发送到 Channel**：生成图片后，使用 `message` 工具将图片发送到 channel：
+
+```python
+# 示例：发送生成的图片到当前 channel
+# 1. 找到最新生成的图片
+latest_image = exec("ls -t ~/Library/Application\ Support/gemini-web/images/*.png | head -1")
+
+# 2. 使用 message 工具发送
+message(
+    action="send",
+    channel="<current_channel_id>",  # 从上下文获取
+    media=latest_image.strip(),
+    caption="生成的图片"
+)
+```
 
 ## Cookie 自动刷新
 
