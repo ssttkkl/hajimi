@@ -77,7 +77,7 @@ uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Libra
 
 Images are automatically saved to `~/Library/Application Support/gemini-web/images/` (macOS).
 
-**📤 Send to Channel**: After generating an image, use the message tool to send the image to a channel:
+**📤 Send to Channel** (If you are OpenClaw): After generating an image, use the message tool to send the image to a channel:
 
 ```python
 # Example: Send the generated image to the current channel
