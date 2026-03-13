@@ -15,3 +15,7 @@ test_result.txt
 dist/
 build/
 *.png
+
+# Test files
+test_*.py
+test_*.txt
