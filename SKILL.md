@@ -27,7 +27,6 @@ Chat with Google Gemini AI, supporting:
 ### 1. Install Dependencies
 
 ```bash
-cd ~/.agents/skills/gemini-web
 uv sync
 ```
 
@@ -36,7 +35,6 @@ uv sync
 Run the following command to launch Chrome and automatically retrieve cookies:
 
 ```bash
-cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
 
@@ -47,8 +45,6 @@ This will start Chrome in debugging mode. You simply need to log in to your Goog
 **⚠️ All commands must be executed using `uv run`**
 
 ```bash
-cd ~/.agents/skills/gemini-web
-
 # Single-turn generation
 uv run gemini-web generate "Explain quantum computing"
 
@@ -71,7 +67,6 @@ uv run gemini-web generate "Summarize" --output result.txt
 ## Image Generation
 
 ```bash
-cd ~/.agents/skills/gemini-web
 uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Library/Application\ Support/gemini-web/images/
 ```
 
@@ -116,7 +111,6 @@ For more details, refer to: https://github.com/HanaokaYuzu/Gemini-API/issues/6
 If you encounter an authentication failure or cookie expiration error, please re-run the authentication command:
 
 ```bash
-cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
 
@@ -125,7 +119,6 @@ This will start Chrome in debugging mode. You simply need to log in to your Goog
 ## File Analysis
 
 ```bash
-cd ~/.agents/skills/gemini-web
 uv run gemini-web generate "Describe this image" --file photo.jpg
 uv run gemini-web generate "Summarize this document" --file report.pdf
 ```
@@ -133,8 +126,6 @@ uv run gemini-web generate "Summarize this document" --file report.pdf
 ## Session Management
 
 ```bash
-cd ~/.agents/skills/gemini-web
-
 # List all sessions
 uv run gemini-web session list
 
