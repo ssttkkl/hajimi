@@ -5,7 +5,7 @@ import subprocess
 import time
 import tempfile
 from pathlib import Path
-from ..client import get_config_path
+from ..client import get_config_path, get_data_dir
 
 @click.group()
 def auth_group():
@@ -45,10 +45,11 @@ async def _login():
         click.echo("错误: 需要 psutil 库，请运行 'uv add psutil'")
         return
 
-    # 创建临时用户数据目录
-    temp_dir = tempfile.mkdtemp(prefix="gemini_chrome_")
+    # 使用持久化的用户数据目录
+    chrome_profile_dir = get_data_dir() / "chrome-profile"
+    chrome_profile_dir.mkdir(parents=True, exist_ok=True)
     click.echo(f"启动调试 Chrome...")
-    click.echo(f"临时数据目录: {temp_dir}")
+    click.echo(f"Chrome Profile 目录: {chrome_profile_dir}")
 
     # 检测操作系统并启动 Chrome
     system = os.uname().sysname if hasattr(os, 'uname') else 'Windows'
@@ -85,7 +86,7 @@ async def _login():
     cmd = [
         chrome_path,
         f'--remote-debugging-port={debug_port}',
-        f'--user-data-dir={temp_dir}',
+        f'--user-data-dir={chrome_profile_dir}',
         '--no-first-run',
         '--no-default-browser-check',
         '--disable-default-apps',
@@ -170,13 +171,6 @@ async def _login():
             for child in parent.children(recursive=True):
                 child.terminate()
             parent.terminate()
-        except:
-            pass
-
-        # 清理临时目录
-        import shutil
-        try:
-            shutil.rmtree(temp_dir, ignore_errors=True)
         except:
             pass
 

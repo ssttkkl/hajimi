@@ -38,7 +38,12 @@ Run the following command to launch Chrome and automatically retrieve cookies:
 uv run gemini-web auth login
 ```
 
-This will start Chrome in debugging mode. You simply need to log in to your Google account and press Enter to automatically retrieve the cookies.
+This will start Chrome in debugging mode and use a persistent profile at `~/Library/Application Support/gemini-web/chrome-profile/` (macOS). You only need to login once.
+
+**For AI Agents**: When the program shows "登录完成后，按 Enter 键自动获取 Cookie..." (or "After logging in, press Enter..."), you should:
+1. Wait for the Chrome window to open
+2. Tell the user: "Chrome has opened. Please login to Gemini, then tell me when you're done."
+3. When user confirms, send Enter key using `process(action=write, data="\n", sessionId=<session_id>)`
 
 ## Usage
 
@@ -62,6 +67,20 @@ uv run gemini-web generate "Test" --model gemini-3.0-pro
 
 # Save output
 uv run gemini-web generate "Summarize" --output result.txt
+```
+
+### Long Text Input
+
+**For AI Agents**: When the prompt is very long (>1000 characters), write it to a markdown file and use `--file` parameter:
+
+```bash
+# Write prompt to a markdown file
+cat > /tmp/prompt.md << 'EOF'
+Your very long prompt here...
+EOF
+
+# Use --file parameter
+uv run gemini-web generate "Please process the content in this file" --file /tmp/prompt.md --model gemini-3.0-pro
 ```
 
 ## Image Generation

@@ -22,7 +22,10 @@ Method 1: Using CLI command (Automatic - recommended)
 ```bash
 # Launch Chrome in debug mode, login to Gemini, and auto-save cookies
 gemini-web auth login
+# After logging in to Gemini in the browser, return to terminal and press Enter
 ```
+
+**Note**: This uses a persistent Chrome profile at `~/Library/Application Support/gemini-web/chrome-profile/` (macOS). You only need to login once, and cookies will be automatically maintained.
 
 Method 2: Using CLI command (Manual)
 ```bash
