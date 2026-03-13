@@ -1,8 +1,7 @@
 import os
 import json
 from pathlib import Path
-from gemini_webapi import GeminiClient
-from gemini_webapi.errors import AuthError
+from gemini_webapi import GeminiClient, AuthError
 
 def get_data_dir() -> Path:
     """获取平台特定的数据目录"""
