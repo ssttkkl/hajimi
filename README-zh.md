@@ -16,13 +16,24 @@ uv sync
 
 **设置 Gemini Cookie（必需）：**
 
-方式 1：环境变量
+方式 1：自动登录（推荐）
+```bash
+# 启动调试模式 Chrome，登录后自动获取 cookie
+gemini-web auth login
+```
+
+方式 2：手动配置
+```bash
+gemini-web auth setup
+```
+
+方式 3：环境变量
 ```bash
 export GEMINI_COOKIE_1PSID="YOUR_1PSID_VALUE"
 export GEMINI_COOKIE_1PSIDTS="YOUR_1PSIDTS_VALUE"
 ```
 
-方式 2：配置文件 `~/.config/gemini-web/cookies.json`
+方式 4：配置文件 `~/.config/gemini-web/cookies.json`
 ```json
 {
   "secure_1psid": "YOUR_1PSID_VALUE",
@@ -124,7 +135,6 @@ export GEMINI_COOKIE_1PSIDTS="YOUR_1PSIDTS_VALUE"
 - **图像生成**：根据文本提示生成图像
 - **文件处理**：支持图像、PDF 等多种文件格式的分析
 - **多轮对话**：基于 SQLite 的会话管理，自动保持上下文
-  - ⚠️ **已知问题**：由于上游库 [Gemini-API](https://github.com/HanaokaYuzu/Gemini-API) 的 bug，多轮对话的历史记录无法正确保留。这是库本身的问题，而非本项目的实现问题。
 - **流式响应**：支持流式输出
 - **思维链模式**：支持 Gemini 思维链推理
 - **联网搜索**：支持实时网络搜索

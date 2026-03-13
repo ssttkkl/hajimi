@@ -109,9 +109,10 @@ async def call_tool(name: str, arguments: dict):
             metadata = await db.load(session_id)
 
         if not metadata:
-            output = await client.generate_content(prompt, files=files or None, model=model)
-            temp_chat = client.start_chat(metadata=output.metadata, model=model)
-            await db.save(session_id, temp_chat.metadata)
+            # 使用 start_chat + send_message 来保持对话一致性
+            chat = client.start_chat(model=model)
+            output = await chat.send_message(prompt, files=files or None)
+            await db.save(session_id, chat.metadata)
         else:
             chat = client.start_chat(metadata=metadata, model=model)
             output = await chat.send_message(prompt, files=files or None)

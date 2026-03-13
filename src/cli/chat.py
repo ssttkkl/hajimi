@@ -42,8 +42,9 @@ async def _chat(session_id, model):
                     continue
 
                 if chat is None:
-                    result = await client.generate_content(prompt, model=model)
-                    chat = client.start_chat(metadata=result.metadata, model=model)
+                    # 使用 start_chat + send_message 来保持对话一致性
+                    chat = client.start_chat(model=model)
+                    result = await chat.send_message(prompt)
                 else:
                     result = await chat.send_message(prompt)
 

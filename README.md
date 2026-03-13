@@ -18,18 +18,24 @@ uv sync
 
 **Set Gemini Cookies (Required):**
 
-Method 1: Using CLI command
+Method 1: Using CLI command (Automatic - recommended)
+```bash
+# Launch Chrome in debug mode, login to Gemini, and auto-save cookies
+gemini-web auth login
+```
+
+Method 2: Using CLI command (Manual)
 ```bash
 gemini-web auth setup
 ```
 
-Method 2: Environment Variables
+Method 3: Environment Variables
 ```bash
 export GEMINI_COOKIE_1PSID="YOUR_1PSID_VALUE"
 export GEMINI_COOKIE_1PSIDTS="YOUR_1PSIDTS_VALUE"
 ```
 
-Method 3: Config File `~/.config/gemini-web/cookies.json`
+Method 4: Config File `~/.config/gemini-web/cookies.json`
 ```json
 {
   "secure_1psid": "YOUR_1PSID_VALUE",
@@ -43,7 +49,10 @@ Method 3: Config File `~/.config/gemini-web/cookies.json`
 
 **Authentication:**
 ```bash
-# Setup cookies
+# Auto-login with Chrome debug mode (recommended)
+gemini-web auth login
+
+# Manual cookie setup
 gemini-web auth setup
 
 # Check auth status
@@ -199,7 +208,6 @@ Get complete conversation history for a session.
 - **Image Generation**: Generate images from text prompts
 - **File Processing**: Analyze images, PDFs, and other file formats
 - **Multi-turn Conversation**: SQLite-based session management with automatic context preservation
-  - ⚠️ **Known Issue**: Due to a bug in the upstream [Gemini-API](https://github.com/HanaokaYuzu/Gemini-API) library, conversation history cannot be properly preserved. This is a library issue, not an implementation problem in this project.
 - **Streaming Response**: Support for streaming output
 - **Thinking Mode**: Support for Gemini chain-of-thought reasoning
 - **Web Search**: Real-time web search capabilities

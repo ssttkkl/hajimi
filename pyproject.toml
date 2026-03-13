@@ -8,6 +8,7 @@ dependencies = [
     "aiosqlite>=0.20.0",
     "click>=8.0.0",
     "browser-cookie3>=0.20.1",
+    "psutil>=5.9.0",
 ]
 
 [tool.uv]
