@@ -38,10 +38,22 @@ async def init_client():
             secure_1psidts = secure_1psidts or cookies_data.get("secure_1psidts")
 
     if not secure_1psid or not secure_1psidts:
-        raise ValueError("Missing required cookies: GEMINI_COOKIE_1PSID and GEMINI_COOKIE_1PSIDTS")
+        raise ValueError(
+            "Missing required cookies: GEMINI_COOKIE_1PSID and GEMINI_COOKIE_1PSIDTS. "
+            "Please run 'gemini-web auth login' or 'gemini-web auth setup' to configure."
+        )
 
-    client = GeminiClient(secure_1psid=secure_1psid, secure_1psidts=secure_1psidts)
-    await client.init()
+    try:
+        client = GeminiClient(secure_1psid=secure_1psid, secure_1psidts=secure_1psidts)
+        await client.init()
+    except Exception as e:
+        error_msg = str(e).lower()
+        if any(k in error_msg for k in ['cookie', 'auth', 'token', 'unauthorized', '401', '403', 'failed']):
+            raise ValueError(
+                f"Authentication failed: {e}. "
+                "Please run 'gemini-web auth login' to refresh your cookies."
+            )
+        raise
 
 @server.list_tools()
 async def list_tools() -> list[Tool]:
