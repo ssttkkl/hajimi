@@ -28,21 +28,14 @@ uv sync
 
 ### 2. 初始配置（首次）
 
-**方式 1（推荐）- 自动登录：**
+运行以下命令启动 Chrome 并自动获取 cookie：
+
 ```bash
 cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
-这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取 cookie。
 
-**方式 2 - 手动输入：**
-1. 打开 Chrome 访问 https://gemini.google.com 并登录
-2. 运行：
-```bash
-cd ~/.agents/skills/gemini-web
-uv run gemini-web auth setup
-```
-3. 按提示输入 `__Secure-1PSID` 和 `__Secure-1PSIDTS`
+这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取 cookie。
 
 ## 使用方式
 
@@ -113,41 +106,16 @@ message(
 
 更多详情参考：https://github.com/HanaokaYuzu/Gemini-API/issues/6
 
-## 手动刷新 Cookie
+## 刷新 Cookie
 
-如果遇到 "认证失败" 或 cookie 过期错误，需要重新获取 cookie：
+如果遇到 "认证失败" 或 cookie 过期错误，请重新运行认证命令：
 
-**方式 1（推荐）- 自动登录：**
 ```bash
 cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
 
-**方式 2 - 手动刷新：**
-```bash
-cd ~/.agents/skills/gemini-web
-uv run python3 -c "
-import browser_cookie3
-import json
-import os
-
-cj = browser_cookie3.chrome(domain_name='google.com')
-cookies = list(cj)
-
-psid = [c for c in cookies if c.name == '__Secure-1PSID' and c.domain == '.google.com'][0].value
-psidts = [c for c in cookies if c.name == '__Secure-1PSIDTS' and c.domain == '.google.com'][0].value
-
-config = {'secure_1psid': psid, 'secure_1psidts': psidts}
-
-os.makedirs(os.path.expanduser('~/.config/gemini-web'), exist_ok=True)
-with open(os.path.expanduser('~/.config/gemini-web/cookies.json'), 'w') as f:
-    json.dump(config, f, indent=2)
-
-print('Cookie updated!')
-"
-```
-
-**前提条件**：确保 Chrome 已登录 https://gemini.google.com
+这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取新的 cookie。
 
 ## 文件分析
 
@@ -182,9 +150,7 @@ uv run gemini-web session delete session-xxx
 
 ### Cookie 过期/无法获取
 
-1. 运行 `uv run gemini-web auth login` 自动获取新 cookie
-2. 或确保 Chrome 已登录 https://gemini.google.com 后手动刷新
-3. 重试原命令
+运行 `uv run gemini-web auth login` 重新获取 cookie，然后重试原命令。
 
 **提示**：为避免频繁过期，建议使用 Chrome 隐私模式获取 cookie 并立即关闭窗口。
 
