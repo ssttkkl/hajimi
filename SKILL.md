@@ -1,6 +1,6 @@
 ---
 name: gemini-web-chat
-description: 与 Google Gemini AI 对话，支持文本生成、图像生成、文件分析和多轮对话。
+description: Chat with Google Gemini AI, supporting text generation, image generation, file analysis, and multi-turn conversations.
 metadata:
   {
     "openclaw":
@@ -13,165 +13,165 @@ metadata:
 
 # Gemini Web Chat
 
-与 Google Gemini AI 进行对话，支持：
+Chat with Google Gemini AI, supporting:
 
-- **文本生成** - 回答问题、创作内容、代码编写等
-- **图像生成** - 根据描述生成图片
-- **文件分析** - 分析图片、PDF 等文件内容
-- **多轮对话** - 保持上下文连续对话
+- **Text Generation** - Answering questions, content creation, coding, etc.
+- **Image Generation** - Generating images based on descriptions.
+- **File Analysis** - Analyzing the content of images, PDFs, and other files.
+- **Multi-turn Conversations** - Maintaining context for continuous dialogue.
 
-**⚠️ 重要**：本项目使用 `uv` 管理依赖，所有命令需通过 `uv run` 执行。
+**⚠️ Important**: This project uses uv for dependency management. All commands must be executed via `uv run`.
 
-## 安装与配置
+## Installation and Configuration
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
 cd ~/.agents/skills/gemini-web
 uv sync
 ```
 
-### 2. 初始配置（首次）
+### 2. Initial Configuration (First Time)
 
-运行以下命令启动 Chrome 并自动获取 cookie：
+Run the following command to launch Chrome and automatically retrieve cookies:
 
 ```bash
 cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
 
-这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取 cookie。
+This will start Chrome in debugging mode. You simply need to log in to your Google account and press Enter to automatically retrieve the cookies.
 
-## 使用方式
+## Usage
 
-**⚠️ 必须使用 `uv run` 执行所有命令**
+**⚠️ All commands must be executed using `uv run`**
 
 ```bash
 cd ~/.agents/skills/gemini-web
 
-# 单轮生成
+# Single-turn generation
 uv run gemini-web generate "Explain quantum computing"
 
-# 带图片生成
-uv run gemini-web generate "画一只雪中独狼" --image-output ~/Library/Application\ Support/gemini-web/images/
+# Generation with image
+uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Library/Application\ Support/gemini-web/images/
 
-# 带文件输入
-uv run gemini-web generate "描述这张图片" --file photo.jpg
+# Generation with file input
+uv run gemini-web generate "Describe this image" --file photo.jpg
 
-# 流式输出
-uv run gemini-web generate "讲个故事" --stream
+# Streaming output
+uv run gemini-web generate "Tell a story" --stream
 
-# 指定模型
-uv run gemini-web generate "测试" --model gemini-3.0-pro
+# Specify model
+uv run gemini-web generate "Test" --model gemini-3.0-pro
 
-# 保存输出
-uv run gemini-web generate "总结" --output result.txt
+# Save output
+uv run gemini-web generate "Summarize" --output result.txt
 ```
 
-## 图像生成
+## Image Generation
 
 ```bash
 cd ~/.agents/skills/gemini-web
-uv run gemini-web generate "画一只雪中独狼" --image-output ~/Library/Application\ Support/gemini-web/images/
+uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Library/Application\ Support/gemini-web/images/
 ```
 
-图片自动保存到 `~/Library/Application Support/gemini-web/images/` (macOS)。
+Images are automatically saved to `~/Library/Application Support/gemini-web/images/` (macOS).
 
-**📤 发送到 Channel**：生成图片后，使用 `message` 工具将图片发送到 channel：
+**📤 Send to Channel**: After generating an image, use the message tool to send the image to a channel:
 
 ```python
-# 示例：发送生成的图片到当前 channel
-# 1. 找到最新生成的图片
+# Example: Send the generated image to the current channel
+# 1. Find the latest generated image
 latest_image = exec("ls -t ~/Library/Application\ Support/gemini-web/images/*.png | head -1")
 
-# 2. 使用 message 工具发送
+# 2. Send using the message tool
 message(
     action="send",
-    channel="<current_channel_id>",  # 从上下文获取
+    channel="<current_channel_id>",  # Retrieve from context
     media=latest_image.strip(),
-    caption="生成的图片"
+    caption="Generated image"
 )
 ```
 
-## Cookie 自动刷新
+## Automatic Cookie Refresh
 
-**API 的自动 Cookie 刷新功能默认启用**，无需额外设置。它允许您保持 API 服务运行，而无需担心 Cookie 过期。
+**The API's automatic Cookie refresh feature is enabled by default**, requiring no extra setup. It allows you to keep the API service running without worrying about Cookie expiration.
 
-此功能可能需要您在浏览器中重新登录您的 Google 帐户。这是正常现象，不会影响 API 的功能。
+This feature might require you to re-login to your Google account in the browser. This is normal and will not affect the API's functionality.
 
-### 最佳实践：使用隐私模式获取 Cookie
+### Best Practice: Use Incognito Mode to Get Cookies
 
-为避免频繁重新登录，建议从单独的浏览器会话中获取 cookie，并尽快关闭该会话以获得最佳使用体验：
+To avoid logging in frequently, it is recommended to retrieve cookies from a separate browser session and close that session as soon as possible for the best experience:
 
-1. 打开 Chrome **隐私模式（无痕模式）**
-2. 访问 https://gemini.google.com 并登录
-3. 获取 `__Secure-1PSID` 和 `__Secure-1PSIDTS` cookie
-4. **立即关闭隐私模式窗口**
-5. 这样获取的 cookie 可以持续使用数周
+1. Open Chrome Incognito mode
+2. Visit https://gemini.google.com and log in
+3. Retrieve the `__Secure-1PSID` and `__Secure-1PSIDTS` cookies
+4. Close the Incognito mode window immediately
+5. Cookies obtained this way can last for weeks
 
-更多详情参考：https://github.com/HanaokaYuzu/Gemini-API/issues/6
+For more details, refer to: https://github.com/HanaokaYuzu/Gemini-API/issues/6
 
-## 刷新 Cookie
+## Refresh Cookies
 
-如果遇到 "认证失败" 或 cookie 过期错误，请重新运行认证命令：
+If you encounter an authentication failure or cookie expiration error, please re-run the authentication command:
 
 ```bash
 cd ~/.agents/skills/gemini-web
 uv run gemini-web auth login
 ```
 
-这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取新的 cookie。
+This will start Chrome in debugging mode. You simply need to log in to your Google account and press Enter to automatically retrieve the new cookies.
 
-## 文件分析
+## File Analysis
 
 ```bash
 cd ~/.agents/skills/gemini-web
-uv run gemini-web generate "描述这张图片" --file photo.jpg
-uv run gemini-web generate "总结这份文档" --file report.pdf
+uv run gemini-web generate "Describe this image" --file photo.jpg
+uv run gemini-web generate "Summarize this document" --file report.pdf
 ```
 
-## 会话管理
+## Session Management
 
 ```bash
 cd ~/.agents/skills/gemini-web
 
-# 列出所有会话
+# List all sessions
 uv run gemini-web session list
 
-# 查看会话历史
+# View session history
 uv run gemini-web session history session-xxx
 
-# 删除会话
+# Delete a session
 uv run gemini-web session delete session-xxx
 ```
 
-## 可用模型
+## Available Models
 
-- `gemini-3.0-flash` (默认) - 快速、高效
-- `gemini-3.0-pro` - 最强大的模型
-- `gemini-3.0-flash-thinking` - 思维链推理
+- `gemini-3.0-flash` (Default) - Fast and efficient
+- `gemini-3.0-pro` - The most powerful model
+- `gemini-3.0-flash-thinking` - Chain-of-thought reasoning
 
-## 故障排除
+## Troubleshooting
 
-### 图片生成失败
+### Image Generation Failed
 
-- 检查 cookie 是否有效（运行 `uv run gemini-web auth login` 刷新）
-- 确保账户有图像生成权限
-- 尝试刷新 cookie 后重试
+- Check if the cookie is valid (run `uv run gemini-web auth login` to refresh)
+- Ensure the account has image generation permissions
+- Try refreshing the cookie and attempt again
 
-## 数据目录
+## Data Directories
 
-- 配置文件: `~/.config/gemini-web/cookies.json`
-- 会话数据: `~/Library/Application Support/gemini-web/sessions.db` (macOS)
-- 生成图片: `~/Library/Application Support/gemini-web/images/`
+- Config file: `~/.config/gemini-web/cookies.json`
+- Session data: `~/Library/Application Support/gemini-web/sessions.db` (macOS)
+- Generated images: `~/Library/Application Support/gemini-web/images/`
 
-## 功能特性
+## Features
 
-- ✅ 自动生成式对话
-- ✅ 图像生成
-- ✅ 文件分析（图片、PDF 等）
-- ✅ 多轮对话与上下文保持
-- ✅ 流式响应
-- ✅ 网络搜索能力
-- ✅ 代码执行与生成
-- ✅ **Cookie 自动刷新** — 默认启用，无需额外配置
+- ✅ Automated generative chat
+- ✅ Image generation
+- ✅ File analysis (Images, PDFs, etc.)
+- ✅ Multi-turn conversation and context preservation
+- ✅ Streaming response
+- ✅ Web search capability
+- ✅ Code execution and generation
+- ✅ Automatic Cookie Refresh — Enabled by default, no extra configuration needed
