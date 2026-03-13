@@ -148,15 +148,9 @@ uv run gemini-web session delete session-xxx
 
 ## 故障排除
 
-### Cookie 过期/无法获取
-
-运行 `uv run gemini-web auth login` 重新获取 cookie，然后重试原命令。
-
-**提示**：为避免频繁过期，建议使用 Chrome 隐私模式获取 cookie 并立即关闭窗口。
-
 ### 图片生成失败
 
-- 检查 cookie 是否有效（运行手动刷新）
+- 检查 cookie 是否有效（运行 `uv run gemini-web auth login` 刷新）
 - 确保账户有图像生成权限
 - 尝试刷新 cookie 后重试
 
