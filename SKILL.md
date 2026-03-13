@@ -28,6 +28,14 @@ uv sync
 
 ### 2. 初始配置（首次）
 
+**方式 1（推荐）- 自动登录：**
+```bash
+cd ~/.agents/skills/gemini-web
+uv run gemini-web auth login
+```
+这会启动 Chrome 调试模式，你只需登录 Google 账号，然后按 Enter 即可自动获取 cookie。
+
+**方式 2 - 手动输入：**
 1. 打开 Chrome 访问 https://gemini.google.com 并登录
 2. 运行：
 ```bash
@@ -107,8 +115,15 @@ message(
 
 ## 手动刷新 Cookie
 
-如果遇到 "您登录了吗？" 或 cookie 过期错误，需要手动刷新 cookie：
+如果遇到 "认证失败" 或 cookie 过期错误，需要重新获取 cookie：
 
+**方式 1（推荐）- 自动登录：**
+```bash
+cd ~/.agents/skills/gemini-web
+uv run gemini-web auth login
+```
+
+**方式 2 - 手动刷新：**
 ```bash
 cd ~/.agents/skills/gemini-web
 uv run python3 -c "
@@ -167,8 +182,8 @@ uv run gemini-web session delete session-xxx
 
 ### Cookie 过期/无法获取
 
-1. 确保 Chrome 已登录 https://gemini.google.com
-2. 运行上面的 **手动刷新 Cookie** 命令
+1. 运行 `uv run gemini-web auth login` 自动获取新 cookie
+2. 或确保 Chrome 已登录 https://gemini.google.com 后手动刷新
 3. 重试原命令
 
 **提示**：为避免频繁过期，建议使用 Chrome 隐私模式获取 cookie 并立即关闭窗口。
