@@ -1,6 +1,6 @@
 ---
 name: gemini-web-chat
-description: Chat with Google Gemini via gemini-web CLI. Supports text generation, image generation, file analysis, and multi-turn conversations. Auto-refreshes cookies from Chrome.
+description: 与 Google Gemini AI 对话，支持文本生成、图像生成、文件分析和多轮对话。
 metadata:
   {
     "openclaw":
@@ -13,7 +13,12 @@ metadata:
 
 # Gemini Web Chat
 
-Use Google Gemini through the gemini-web CLI for text generation, image creation, file analysis, and conversational AI.
+与 Google Gemini AI 进行对话，支持：
+
+- **文本生成** - 回答问题、创作内容、代码编写等
+- **图像生成** - 根据描述生成图片
+- **文件分析** - 分析图片、PDF 等文件内容
+- **多轮对话** - 保持上下文连续对话
 
 **⚠️ 重要**：本项目使用 `uv` 管理依赖，所有命令需通过 `uv run` 执行。
 
