@@ -39,21 +39,13 @@ For manual configuration or troubleshooting, see [references/setup.md](reference
 
 ## Image Generation Workflow
 
-### 1. Generate image to /data directory
+Generate image to persistent directory:
 
 ```bash
 uv run gemini-web generate "一盘精致的日式草莓大福" --image-output /data/gemini-web-images/
 ```
 
-### 2. Send image via send_sandbox_image tool
-
-```bash
-# List latest image
-ls -t /data/gemini-web-images/*.png | head -1
-
-# Copy the filename and use with send_sandbox_image tool
-# Example: send_sandbox_image(image_path="/data/gemini-web-images/20260315145246_xxx.png")
-```
+Images are saved to `/data/gemini-web-images/` for cross-session persistence. Use your platform's image sending capabilities to deliver the generated image.
 
 ## Long Text Input
 
