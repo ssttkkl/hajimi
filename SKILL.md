@@ -32,6 +32,8 @@ uv sync
 
 ### 2. Initial Configuration (First Time)
 
+**Option A: Automatic Login (Recommended)**
+
 Run the following command to launch Chrome and automatically retrieve cookies:
 
 ```bash
@@ -44,6 +46,30 @@ This will start Chrome in debugging mode and use a persistent profile at `~/Libr
 1. Wait for the Chrome window to open
 2. Tell the user: "Chrome has opened. Please login to Gemini, then tell me when you're done."
 3. When user confirms, send Enter key using `process(action=write, data="\n", sessionId=<session_id>)`
+
+**Option B: Manual Cookie Configuration**
+
+If automatic login doesn't work, you can manually create the cookies file:
+
+1. Open Chrome and visit https://gemini.google.com
+2. Login to your Google account
+3. Open DevTools (F12) → Application → Cookies → https://gemini.google.com
+4. Find and copy these two cookies:
+   - `__Secure-1PSID`
+   - `__Secure-1PSIDTS`
+5. Create the config file:
+
+```bash
+mkdir -p ~/.config/gemini-web
+cat > ~/.config/gemini-web/cookies.json << 'EOF'
+{
+  "__Secure-1PSID": "YOUR_PSID_VALUE_HERE",
+  "__Secure-1PSIDTS": "YOUR_PSIDTS_VALUE_HERE"
+}
+EOF
+```
+
+Replace `YOUR_PSID_VALUE_HERE` and `YOUR_PSIDTS_VALUE_HERE` with the actual cookie values you copied.
 
 ## Usage
 
