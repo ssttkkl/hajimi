@@ -1,6 +1,6 @@
 ---
 name: gemini-web-chat
-description: Chat with Google Gemini AI, supporting text generation, image generation, file analysis, and multi-turn conversations.
+description: Chat with Google Gemini AI via web interface, supporting text generation, image generation, file analysis, and multi-turn conversations. Use when: (1) Generating images with Gemini/Imagen 3, (2) Analyzing files (images/PDFs), (3) Long-form content generation, (4) Multi-turn conversations requiring context, (5) Tasks requiring Gemini-specific capabilities (thinking mode, web search).
 metadata:
   {
     "openclaw":
@@ -13,201 +13,74 @@ metadata:
 
 # Gemini Web Chat
 
-Chat with Google Gemini AI, supporting:
+⚠️ **All commands must use `uv run` prefix**
 
-- **Text Generation** - Answering questions, content creation, coding, etc.
-- **Image Generation** - Generating images based on descriptions.
-- **File Analysis** - Analyzing the content of images, PDFs, and other files.
-- **Multi-turn Conversations** - Maintaining context for continuous dialogue.
+## Quick Reference
 
-**⚠️ Important**: This project uses uv for dependency management. All commands must be executed via `uv run`.
+| User Intent | Command Template |
+|-------------|------------------|
+| Generate text | `uv run gemini-web generate "prompt"` |
+| Generate image | `uv run gemini-web generate "描述" --image-output /data/gemini-web-images/` |
+| Analyze file | `uv run gemini-web generate "question" --file /path/to/file` |
+| Long text (>1000 chars) | Write to /tmp/prompt.md, use `--file /tmp/prompt.md` |
+| Specify model | Add `--model gemini-3.0-pro` |
+| Stream output | Add `--stream` |
 
-## Installation and Configuration
+## Setup
 
-### 1. Install Dependencies
+**First time only:**
 
 ```bash
 uv sync
-```
-
-### 2. Initial Configuration (First Time)
-
-**Option A: Automatic Login (Recommended)**
-
-Run the following command to launch Chrome and automatically retrieve cookies:
-
-```bash
 uv run gemini-web auth login
 ```
 
-This will start Chrome in debugging mode and use a persistent profile at `~/Library/Application Support/gemini-web/chrome-profile/` (macOS). You only need to login once.
+For manual configuration or troubleshooting, see [references/setup.md](references/setup.md)
 
-**For AI Agents**: When the program shows "登录完成后，按 Enter 键自动获取 Cookie..." (or "After logging in, press Enter..."), you should:
-1. Wait for the Chrome window to open
-2. Tell the user: "Chrome has opened. Please login to Gemini, then tell me when you're done."
-3. When user confirms, send Enter key using `process(action=write, data="\n", sessionId=<session_id>)`
+## Image Generation Workflow
 
-**Option B: Manual Cookie Configuration**
-
-If automatic login doesn't work, you can manually create the cookies file:
-
-1. Open Chrome and visit https://gemini.google.com
-2. Login to your Google account
-3. Open DevTools (F12) → Application → Cookies → https://gemini.google.com
-4. Find and copy these two cookies:
-   - `__Secure-1PSID`
-   - `__Secure-1PSIDTS`
-5. Create the config file:
+### 1. Generate image to /data directory
 
 ```bash
-mkdir -p ~/.config/gemini-web
-cat > ~/.config/gemini-web/cookies.json << 'EOF'
-{
-  "secure_1psid": "YOUR_PSID_VALUE_HERE",
-  "secure_1psidts": "YOUR_PSIDTS_VALUE_HERE"
-}
-EOF
+uv run gemini-web generate "一盘精致的日式草莓大福" --image-output /data/gemini-web-images/
 ```
 
-Replace `YOUR_PSID_VALUE_HERE` and `YOUR_PSIDTS_VALUE_HERE` with the actual cookie values you copied from the browser (the values of `__Secure-1PSID` and `__Secure-1PSIDTS` cookies).
-
-## Usage
-
-**⚠️ All commands must be executed using `uv run`**
+### 2. Send image via send_sandbox_image tool
 
 ```bash
-# Single-turn generation
-uv run gemini-web generate "Explain quantum computing"
+# List latest image
+ls -t /data/gemini-web-images/*.png | head -1
 
-# Generation with image
-uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Library/Application\ Support/gemini-web/images/
-
-# Generation with file input
-uv run gemini-web generate "Describe this image" --file photo.jpg
-
-# Streaming output
-uv run gemini-web generate "Tell a story" --stream
-
-# Specify model
-uv run gemini-web generate "Test" --model gemini-3.0-pro
-
-# Save output
-uv run gemini-web generate "Summarize" --output result.txt
+# Copy the filename and use with send_sandbox_image tool
+# Example: send_sandbox_image(image_path="/data/gemini-web-images/20260315145246_xxx.png")
 ```
 
-### Long Text Input
+## Long Text Input
 
-**For AI Agents**: When the prompt is very long (>1000 characters), write it to a markdown file and use `--file` parameter:
+For prompts >1000 characters:
 
 ```bash
-# Write prompt to a markdown file
 cat > /tmp/prompt.md << 'EOF'
 Your very long prompt here...
 EOF
 
-# Use --file parameter
-uv run gemini-web generate "Please process the content in this file" --file /tmp/prompt.md --model gemini-3.0-pro
-```
-
-## Image Generation
-
-```bash
-uv run gemini-web generate "Draw a lone wolf in the snow" --image-output ~/Library/Application\ Support/gemini-web/images/
-```
-
-Images are automatically saved to `~/Library/Application Support/gemini-web/images/` (macOS).
-
-**📤 Send to Channel** (If you are OpenClaw): After generating an image, use the message tool to send the image to a channel:
-
-```python
-# Example: Send the generated image to the current channel
-# 1. Find the latest generated image
-latest_image = exec("ls -t ~/Library/Application\ Support/gemini-web/images/*.png | head -1")
-
-# 2. Send using the message tool
-message(
-    action="send",
-    channel="<current_channel_id>",  # Retrieve from context
-    media=latest_image.strip(),
-    caption="Generated image"
-)
-```
-
-## Automatic Cookie Refresh
-
-**The API's automatic Cookie refresh feature is enabled by default**, requiring no extra setup. It allows you to keep the API service running without worrying about Cookie expiration.
-
-This feature might require you to re-login to your Google account in the browser. This is normal and will not affect the API's functionality.
-
-### Best Practice: Use Incognito Mode to Get Cookies
-
-To avoid logging in frequently, it is recommended to retrieve cookies from a separate browser session and close that session as soon as possible for the best experience:
-
-1. Open Chrome Incognito mode
-2. Visit https://gemini.google.com and log in
-3. Retrieve the `__Secure-1PSID` and `__Secure-1PSIDTS` cookies
-4. Close the Incognito mode window immediately
-5. Cookies obtained this way can last for weeks
-
-For more details, refer to: https://github.com/HanaokaYuzu/Gemini-API/issues/6
-
-## Refresh Cookies
-
-If you encounter an authentication failure or cookie expiration error, please re-run the authentication command:
-
-```bash
-uv run gemini-web auth login
-```
-
-This will start Chrome in debugging mode. You simply need to log in to your Google account and press Enter to automatically retrieve the new cookies.
-
-## File Analysis
-
-```bash
-uv run gemini-web generate "Describe this image" --file photo.jpg
-uv run gemini-web generate "Summarize this document" --file report.pdf
-```
-
-## Session Management
-
-```bash
-# List all sessions
-uv run gemini-web session list
-
-# View session history
-uv run gemini-web session history session-xxx
-
-# Delete a session
-uv run gemini-web session delete session-xxx
+uv run gemini-web generate "Process this content" --file /tmp/prompt.md
 ```
 
 ## Available Models
 
-- `gemini-3.0-flash` (Default) - Fast and efficient
-- `gemini-3.0-pro` - The most powerful model
-- `gemini-3.0-flash-thinking` - Chain-of-thought reasoning
+- `gemini-3.0-flash` (Default) - Fast
+- `gemini-3.0-pro` - Most powerful
+- `gemini-3.0-flash-thinking` - Chain-of-thought
 
 ## Troubleshooting
 
-### Image Generation Failed
+**Cookie expired?** Run `uv run gemini-web auth login`
 
-- Check if the cookie is valid (run `uv run gemini-web auth login` to refresh)
-- Ensure the account has image generation permissions
-- Try refreshing the cookie and attempt again
+For detailed error messages and solutions, see [references/troubleshooting.md](references/troubleshooting.md)
 
-## Data Directories
+## Full Documentation
 
-- Config file: `~/.config/gemini-web/cookies.json`
-- Session data: `~/Library/Application Support/gemini-web/sessions.db` (macOS)
-- Generated images: `~/Library/Application Support/gemini-web/images/`
-
-## Features
-
-- ✅ Automated generative chat
-- ✅ Image generation
-- ✅ File analysis (Images, PDFs, etc.)
-- ✅ Multi-turn conversation and context preservation
-- ✅ Streaming response
-- ✅ Web search capability
-- ✅ Code execution and generation
-- ✅ Automatic Cookie Refresh — Enabled by default, no extra configuration needed
+- [Setup Guide](references/setup.md) - Installation and authentication
+- [API Reference](references/api-reference.md) - Complete command reference
+- [Troubleshooting](references/troubleshooting.md) - Error messages and solutions
