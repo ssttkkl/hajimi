@@ -32,7 +32,7 @@ metadata:
 
 ```bash
 uv sync
-uv run gemini-web auth login
+uv run gemini-web auth login  # Launches browser for authentication
 ```
 
 For manual configuration or troubleshooting, see [references/setup.md](references/setup.md)
