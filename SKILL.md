@@ -63,13 +63,13 @@ If automatic login doesn't work, you can manually create the cookies file:
 mkdir -p ~/.config/gemini-web
 cat > ~/.config/gemini-web/cookies.json << 'EOF'
 {
-  "__Secure-1PSID": "YOUR_PSID_VALUE_HERE",
-  "__Secure-1PSIDTS": "YOUR_PSIDTS_VALUE_HERE"
+  "secure_1psid": "YOUR_PSID_VALUE_HERE",
+  "secure_1psidts": "YOUR_PSIDTS_VALUE_HERE"
 }
 EOF
 ```
 
-Replace `YOUR_PSID_VALUE_HERE` and `YOUR_PSIDTS_VALUE_HERE` with the actual cookie values you copied.
+Replace `YOUR_PSID_VALUE_HERE` and `YOUR_PSIDTS_VALUE_HERE` with the actual cookie values you copied from the browser (the values of `__Secure-1PSID` and `__Secure-1PSIDTS` cookies).
 
 ## Usage
 
