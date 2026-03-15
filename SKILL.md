@@ -20,7 +20,7 @@ metadata:
 | User Intent | Command Template |
 |-------------|------------------|
 | Generate text | `uv run gemini-web generate "prompt"` |
-| Generate image | `uv run gemini-web generate "描述" --image-output /data/gemini-web-images/` |
+| Generate image | `uv run gemini-web generate "描述" --image-output ./gemini-web-images/` |
 | Analyze file | `uv run gemini-web generate "question" --file /path/to/file` |
 | Long text (>1000 chars) | Write to /tmp/prompt.md, use `--file /tmp/prompt.md` |
 | Specify model | Add `--model gemini-3.0-pro` |
@@ -42,10 +42,10 @@ For manual configuration or troubleshooting, see [references/setup.md](reference
 Generate image to persistent directory:
 
 ```bash
-uv run gemini-web generate "一盘精致的日式草莓大福" --image-output /data/gemini-web-images/
+uv run gemini-web generate "一盘精致的日式草莓大福" --image-output ./gemini-web-images/
 ```
 
-Images are saved to `/data/gemini-web-images/` for cross-session persistence. Use your platform's image sending capabilities to deliver the generated image.
+Images are saved to `./gemini-web-images/` for cross-session persistence. Use your platform's image sending capabilities to deliver the generated image.
 
 ## Long Text Input
 
